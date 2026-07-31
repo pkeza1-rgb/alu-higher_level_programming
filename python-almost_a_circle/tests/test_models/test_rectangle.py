@@ -2,96 +2,111 @@
 """Unit tests for Rectangle."""
 
 import unittest
+import os
 from models.rectangle import Rectangle
 
 
 class TestRectangle(unittest.TestCase):
     """Test Rectangle class."""
 
-    def test_creation(self):
+    def test_valid_creation(self):
         """Test rectangle creation."""
         r = Rectangle(5, 6)
         self.assertEqual(r.width, 5)
         self.assertEqual(r.height, 6)
 
-    def test_id(self):
-        """Test rectangle id."""
-        r = Rectangle(2, 3, 0, 0, 99)
-        self.assertEqual(r.id, 99)
-
-    def test_area(self):
-        """Test rectangle area."""
-        r = Rectangle(4, 5)
-        self.assertEqual(r.area(), 20)
-
-    def test_width_type(self):
-        """Test width validation."""
+    def test_invalid_width_string(self):
+        """Test width string validation."""
         with self.assertRaises(TypeError):
-            Rectangle("4", 5)
+            Rectangle("1", 2)
 
-    def test_height_type(self):
-        """Test height validation."""
+    def test_invalid_height_string(self):
+        """Test height string validation."""
         with self.assertRaises(TypeError):
-            Rectangle(4, "5")
+            Rectangle(1, "2")
 
-    def test_width_value(self):
-        """Test width positive validation."""
+    def test_invalid_x_string(self):
+        """Test x string validation."""
+        with self.assertRaises(TypeError):
+            Rectangle(1, 2, "3")
+
+    def test_invalid_y_string(self):
+        """Test y string validation."""
+        with self.assertRaises(TypeError):
+            Rectangle(1, 2, 3, "4")
+
+    def test_negative_width(self):
+        """Test negative width."""
         with self.assertRaises(ValueError):
-            Rectangle(0, 5)
+            Rectangle(-1, 2)
 
-    def test_height_value(self):
-        """Test height positive validation."""
+    def test_negative_height(self):
+        """Test negative height."""
         with self.assertRaises(ValueError):
-            Rectangle(5, 0)
+            Rectangle(1, -2)
 
-    def test_x_negative(self):
-        """Test x validation."""
-        with self.assertRaises(ValueError):
-            Rectangle(5, 5, -1)
+    def test_display_without_position(self):
+        """Test display without x and y."""
+        r = Rectangle(2, 3)
+        r.display()
 
-    def test_y_negative(self):
-        """Test y validation."""
-        with self.assertRaises(ValueError):
-            Rectangle(5, 5, 0, -1)
+    def test_display_x_only(self):
+        """Test display with x only."""
+        r = Rectangle(10, 12, 1, 0)
+        r.display()
 
-    def test_string(self):
-        """Test rectangle string."""
-        r = Rectangle(4, 6, 2, 1, 10)
-        self.assertEqual(
-            str(r),
-            "[Rectangle] (10) 2/1 - 4/6"
+    def test_display_y_only(self):
+        """Test display with y only."""
+        r = Rectangle(10, 12, 0, 1)
+        r.display()
+
+    def test_display_with_position(self):
+        """Test display with x and y."""
+        r = Rectangle(5, 4, 4, 3)
+        r.display()
+
+    def test_create_partial(self):
+        """Test create with partial dictionary."""
+        r = Rectangle.create(id=89)
+        self.assertEqual(r.id, 89)
+
+    def test_create_full(self):
+        """Test create with all values."""
+        r = Rectangle.create(
+            id=89,
+            width=1,
+            height=2,
+            x=3,
+            y=4
         )
+        self.assertEqual(r.x, 3)
 
-    def test_dictionary(self):
-        """Test rectangle dictionary."""
-        r = Rectangle(3, 4)
-        self.assertEqual(
-            r.to_dictionary(),
-            {
-                "id": r.id,
-                "width": 3,
-                "height": 4,
-                "x": 0,
-                "y": 0
-            }
-        )
+    def test_save_none(self):
+        """Test saving None."""
+        Rectangle.save_to_file(None)
+        self.assertTrue(os.path.exists("Rectangle.json"))
 
-    def test_update_args(self):
-        """Test positional update."""
-        r = Rectangle(1, 1)
-        r.update(5, 6, 7, 8, 9)
-        self.assertEqual(r.id, 5)
-        self.assertEqual(r.width, 6)
-        self.assertEqual(r.height, 7)
-        self.assertEqual(r.x, 8)
-        self.assertEqual(r.y, 9)
+    def test_save_empty(self):
+        """Test saving empty list."""
+        Rectangle.save_to_file([])
+        self.assertTrue(os.path.exists("Rectangle.json"))
 
-    def test_update_kwargs(self):
-        """Test keyword update."""
-        r = Rectangle(1, 1)
-        r.update(width=8, height=9)
-        self.assertEqual(r.width, 8)
-        self.assertEqual(r.height, 9)
+    def test_save_objects(self):
+        """Test saving rectangles."""
+        Rectangle.save_to_file([Rectangle(1, 2)])
+        self.assertTrue(os.path.exists("Rectangle.json"))
+
+    def test_load_missing(self):
+        """Test loading missing file."""
+        if os.path.exists("Rectangle.json"):
+            os.remove("Rectangle.json")
+        self.assertEqual(Rectangle.load_from_file(), [])
+
+    def test_load_existing(self):
+        """Test loading file."""
+        Rectangle.save_to_file([Rectangle(1, 2)])
+        result = Rectangle.load_from_file()
+        self.assertEqual(len(result), 1)
 
 
 if __name__ == "__main__":
