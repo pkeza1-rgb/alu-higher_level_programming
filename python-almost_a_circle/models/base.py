@@ -69,22 +69,24 @@ class Base:
 
     @classmethod
     def create(cls, **dictionary):
-        """Create an instance with attributes assigned.
+        """Create an instance with attributes initialized from a dictionary.
 
         Args:
-            dictionary (dict): Attributes for the instance.
+            dictionary (dict): Attributes to assign.
 
         Returns:
-            object: Instance of the class.
+            object: A new instance of the class.
         """
         if cls.__name__ == "Rectangle":
-            instance = cls(1, 1)
+            dummy = cls(1, 1)
+        elif cls.__name__ == "Square":
+            dummy = cls(1)
         else:
-            instance = cls(1)
+            dummy = cls()
 
-        instance.update(**dictionary)
+        dummy.update(**dictionary)
 
-        return instance
+        return dummy
 
     @classmethod
     def load_from_file(cls):
