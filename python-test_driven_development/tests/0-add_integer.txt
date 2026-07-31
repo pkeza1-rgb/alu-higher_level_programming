@@ -1,0 +1,53 @@
+==========================
+0-add_integer
+==========================
+
+Importing the function:
+
+    >>> add_integer = __import__("0-add_integer").add_integer
+
+Adding integers:
+
+    >>> add_integer(1, 2)
+    3
+
+Using the default value:
+
+    >>> add_integer(2)
+    100
+
+Floats are converted to integers:
+
+    >>> add_integer(100.3, -2)
+    98
+
+Invalid first argument:
+
+    >>> add_integer("2", 3)
+    Traceback (most recent call last):
+    ...
+    TypeError: a must be an integer
+
+Invalid second argument:
+
+    >>> add_integer(3, "2")
+    Traceback (most recent call last):
+    ...
+    TypeError: b must be an integer
+
+Negative numbers:
+
+    >>> add_integer(-5, -3)
+    -8
+
+Mixed integer and float:
+
+    >>> add_integer(10, 5.9)
+    15
+
+None as first argument:
+
+    >>> add_integer(None)
+    Traceback (most recent call last):
+    ...
+    TypeError: a must be an integer

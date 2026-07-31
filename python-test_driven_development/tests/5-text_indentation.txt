@@ -1,0 +1,43 @@
+==========================
+5-text_indentation
+==========================
+
+Import the function:
+
+    >>> text_indentation = __import__("5-text_indentation").text_indentation
+
+Simple sentence:
+
+    >>> text_indentation("Hello. World?")
+    Hello.
+    <BLANKLINE>
+    World?
+    <BLANKLINE>
+
+Sentence with colon:
+
+    >>> text_indentation("Python: awesome.")
+    Python:
+    <BLANKLINE>
+    awesome.
+    <BLANKLINE>
+
+Leading spaces removed:
+
+    >>> text_indentation("Hello.   World.")
+    Hello.
+    <BLANKLINE>
+    World.
+    <BLANKLINE>
+
+No punctuation:
+
+    >>> text_indentation("Hello world")
+    Hello world
+
+Invalid argument:
+
+    >>> text_indentation(12)
+    Traceback (most recent call last):
+    ...
+    TypeError: text must be a string
