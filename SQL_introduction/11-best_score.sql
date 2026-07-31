@@ -1,3 +1,4 @@
+-- SQL script for 11-best_score.sql
 SELECT score, name
 FROM second_table
 WHERE score >= 10
