@@ -9,50 +9,64 @@ Instantiation:
 >>> bg = BaseGeometry()
 
 integer_validator():
+>>> bg.integer_validator()
+
+integer_validator("age"):
+>>> bg.integer_validator("age")
+
+integer_validator("age", 1):
 >>> bg.integer_validator("age", 1)
 
+integer_validator("age", 0):
 >>> try:
 ...     bg.integer_validator("age", 0)
 ... except Exception as e:
 ...     print("[{}] {}".format(e.__class__.__name__, e))
 [ValueError] age must be greater than 0
 
+integer_validator("age", -4):
 >>> try:
 ...     bg.integer_validator("age", -4)
 ... except Exception as e:
 ...     print("[{}] {}".format(e.__class__.__name__, e))
 [ValueError] age must be greater than 0
 
+integer_validator("age", "4"):
 >>> try:
 ...     bg.integer_validator("age", "4")
 ... except Exception as e:
 ...     print("[{}] {}".format(e.__class__.__name__, e))
 [TypeError] age must be an integer
 
+integer_validator("age", (4,)):
 >>> try:
 ...     bg.integer_validator("age", (4,))
 ... except Exception as e:
 ...     print("[{}] {}".format(e.__class__.__name__, e))
 [TypeError] age must be an integer
 
+integer_validator("age", [3]):
 >>> try:
 ...     bg.integer_validator("age", [3])
 ... except Exception as e:
 ...     print("[{}] {}".format(e.__class__.__name__, e))
 [TypeError] age must be an integer
 
+integer_validator("age", True):
 >>> try:
 ...     bg.integer_validator("age", True)
 ... except Exception as e:
 ...     print("[{}] {}".format(e.__class__.__name__, e))
 [TypeError] age must be an integer
 
+integer_validator("age", {3, 4}):
 >>> try:
 ...     bg.integer_validator("age", {3, 4})
 ... except Exception as e:
 ...     print("[{}] {}".format(e.__class__.__name__, e))
 [TypeError] age must be an integer
 
+integer_validator("age", None):
 >>> try:
 ...     bg.integer_validator("age", None)
 ... except Exception as e:
@@ -63,5 +77,5 @@ area():
 >>> try:
 ...     bg.area()
 ... except Exception as e:
-...     print(e)
-area() is not implemented
+...     print("[{}] {}".format(e.__class__.__name__, e))
+[Exception] area() is not implemented
