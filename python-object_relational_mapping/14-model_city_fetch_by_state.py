@@ -1,25 +1,37 @@
 #!/usr/bin/python3
-"""Module that lists all City objects with their state from hbtn_0e_14_usa."""
-import sys
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+"""Fetch cities by state."""
+
 from model_state import Base, State
 from model_city import City
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+import sys
+
 
 if __name__ == "__main__":
+    username = sys.argv[1]
+    password = sys.argv[2]
+    database = sys.argv[3]
+    state_name = sys.argv[4]
+
     engine = create_engine(
         "mysql+mysqldb://{}:{}@localhost/{}".format(
-            sys.argv[1], sys.argv[2], sys.argv[3]),
+            username, password, database
+        ),
         pool_pre_ping=True
     )
-    Base.metadata.create_all(engine)
+
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    rows = session.query(City, State).filter(
-        City.state_id == State.id).order_by(City.id).all()
-    for city, state in rows:
-        print("{}: ({}) {}".format(state.name, city.id, city.name))
+    state = session.query(State).filter(
+        State.name == state_name
+    ).first()
+
+    if state:
+        for city in state.cities:
+            print(city.name)
+    else:
+        print("No state found with name {}".format(state_name))
 
     session.close()
-

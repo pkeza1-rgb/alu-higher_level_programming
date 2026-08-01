@@ -1,15 +1,31 @@
 #!/usr/bin/python3
-"""Module that defines the State class, mapped to the states table."""
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String
+"""Displays states matching the given name."""
 
-Base = declarative_base()
+import MySQLdb
+import sys
 
+if __name__ == "__main__":
+    db = MySQLdb.connect(
+        host="localhost",
+        port=3306,
+        user=sys.argv[1],
+        passwd=sys.argv[2],
+        db=sys.argv[3],
+        charset="utf8"
+    )
 
-class State(Base):
-    """Represent a state stored in the states MySQL table."""
+    cur = db.cursor()
 
-    __tablename__ = "states"
-    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    name = Column(String(128), nullable=False)
+    query = (
+        "SELECT * FROM states "
+        "WHERE BINARY name = '{}' "
+        "ORDER BY id ASC".format(sys.argv[4])
+    )
 
+    cur.execute(query)
+
+    for row in cur.fetchall():
+        print(row)
+
+    cur.close()
+    db.close()
